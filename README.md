@@ -13,3 +13,8 @@ Basic use cases:
 2. Updating the target list given the sheet -- see update_targetlist_from_sheet function.
 
 3. Updating visits given the sheet -- see update_visits_from_sheet function.
+
+## Update Notes:
+
+### 1.2.0
+- prepare_targetinfo.py: added a list of keywords for different transient types.

@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="rolling_snapshot_proposal_editor",
-    version="1.1.1",
+    version="1.2.0",
     author="Kornpob Bhirombhakdi",
     author_email="kbhirombhakdi@stsci.edu",
     long_description=open("README.md").read(),

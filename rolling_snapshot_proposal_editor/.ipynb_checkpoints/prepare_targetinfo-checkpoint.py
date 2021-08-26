@@ -1,4 +1,9 @@
 def prepare_targetinfo(spreadsheet,read_spreadsheet_csv,targetnumber,json_template):
+    from rolling_snapshot_proposal_editor.prepare_targetinfo import _list_tde
+    from rolling_snapshot_proposal_editor.prepare_targetinfo import _list_sn_noclass
+    from rolling_snapshot_proposal_editor.prepare_targetinfo import _list_sn_ia
+    from rolling_snapshot_proposal_editor.prepare_targetinfo import _list_sn_ib
+    from rolling_snapshot_proposal_editor.prepare_targetinfo import _list_sn_ii
     ##### spreadsheet = google spreadsheet in csv format
     ##### targetnumber = a string of target number from the spreadsheet of the object to be prepared.
     ##### json_templat = e.g., fixed_target.json
@@ -33,12 +38,18 @@ def prepare_targetinfo(spreadsheet,read_spreadsheet_csv,targetnumber,json_templa
     f.close()
     targetinfo['Target_Number'] += str(targetnumber)
     targetinfo['Target_Name'] += targetname
-    if targettype == 'TDE':
+    if targettype in _list_tde():
         targetinfo['Description'] += 'EXT-STAR, TIDAL TAIL'
-    elif targettype == 'SN Ia':
+    elif targettype in _list_sn_noclass():
+        targetinfo['Description'] += 'EXT-STAR, SUPERNOVA'
+    elif targettype in _list_sn_ia():
         targetinfo['Description'] += 'EXT-STAR, SUPERNOVA TYPE IA'
-    elif targettype == 'SN IIb':
+    elif targettype in _list_sn_ib():
+        targetinfo['Description'] += 'EXT-STAR, SUPERNOVA TYPE IB'
+    elif targettype in _list_sn_ii():
         targetinfo['Description'] += 'EXT-STAR, SUPERNOVA TYPE II'
+    else:
+        raise ValueError('Cannot determine target type ...')
     targetinfo['Extended'] += 'NO'
     targetinfo['Position'] += "RA={0} +/- 1\", DEC={1} +/- 1\"".format(ra_str,dec_str)
     targetinfo['Equinox'] += 'J2000'
@@ -47,3 +58,18 @@ def prepare_targetinfo(spreadsheet,read_spreadsheet_csv,targetnumber,json_templa
     #####
     print('Return targetinfo ...\n')
     return targetinfo
+def _list_tde():
+    thelist = {'TDE'}
+    return thelist
+def _list_sn_noclass():
+    thelist = {'SN','Ic','Ic-BL','Ic-SLSN','Ic-pec','Ic-norm','Ib/c'}
+    return thelist
+def _list_sn_ia():
+    thelist = {'SN Ia','Ia-91T','Ia-91bg','Ia-02cx','Ia-CSM','Iz-03fg','Ia-18byg'}
+    return thelist
+def _list_sn_ib():
+    thelist = {'SN Ib','Ib','Ib-pec','Ib-norm','Ibn'}
+    return thelist
+def _list_sn_ii():
+    thelist = {'SN II', 'SN IIb','Type II','IIn','II-norm','IIP','IIL','IIb','II-pec'}
+    return thelist
